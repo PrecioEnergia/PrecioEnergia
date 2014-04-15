@@ -1,0 +1,56 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="static/css/main.css" />
+<script type="text/javascript"
+	src="static/dygraphs/dygraph-combined.js"></script>
+</head>
+<body>
+	<!-- {% for greeting in greetings %} {% if greeting.author %}
+	<b>{{ greeting.author }}</b> wrote: {% else %} An anonymous person
+	wrote: {% endif %}
+	<blockquote>{{ greeting.content|escape }}</blockquote>
+	{% endfor %}
+
+	<form action="/sign/" method="post">
+		{% csrf_token %} <input type="hidden" name="precioenergia_name"
+			value="{{ precioenergia_name }}" />
+		<div>
+			<textarea name="content" rows="3" cols="60"></textarea>
+		</div>
+		<div>
+			<input type="submit" value="Sign precioenergia">
+		</div>
+	</form>
+
+	<a href="{{ url }}">{{ url_linktext }}</a> -->
+
+	<div id="graphdiv"></div>
+	<script type="text/javascript">
+  g = new Dygraph(
+    // containing div
+    document.getElementById("graphdiv"),
+    {% autoescape off %}
+    {{str_contenido}},
+    {% endautoescape %}
+    {
+      labels: [ "Fecha", "Precio" ]
+    }
+  );
+</script>
+<p>
+	{{str_contenido}}
+</p>
+
+	<!-- <ul>
+		{% for linea in contenido %}
+		<li>{{linea}}
+			<ul>
+				{% for campo in linea %}
+				<li>{{campo}}</li> {% endfor %}
+		</li>
+	</ul>
+	{% endfor %}
+	</ul> -->
+
+</body>
+</html>
