@@ -32,7 +32,7 @@ Para hacer el deploy del proyecto a  moverse a donde hayamos descargado el *goog
 appcfg.py --oauth2 -A precio-energia update ../workspace-python/PrecioEnergia #O la ruta donde quiera que esté el proyecto
 ```
 
-Podremos acceder a (http://localhost:8080) y tendremos la aplicación web lista para jugar en local.
+Podremos acceder a [http://localhost:8080](http://localhost:8080) y tendremos la aplicación web lista para jugar en local.
 
 ## Funcionamiento dentro de Eclipse
 Abrimos el proyecto con eclipse-pydev. Instalamos el Google Suit Plugin para tener appengine dentro de eclipse.
