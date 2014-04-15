@@ -26,13 +26,13 @@ Podéis echarle un ojo [aquí](https://developers.google.com/appengine/docs/pyth
 Si pese a eso os sigue petando (a mi me pasa, solo puedo correrlo en local desde el eclipse) la opción más probable es porque python no está cogiendo bien la ruta del SDK, creo que habría que jugar con la variable *PYTHONPATH*
 
 
-Para hacer el deploy del proyecto a appengine: 
+Para hacer el deploy del proyecto a  moverse a donde hayamos descargado el *google_appengine* y ejecutar: 
 
 ```bash
-appcfg.py --oauth2 -A precio-energia update ../workspace-python/PrecioEnergia
+appcfg.py --oauth2 -A precio-energia update ../workspace-python/PrecioEnergia #O la ruta donde quiera que esté el proyecto
 ```
 
-Podremos acceder a http://localhost:8080 y tendremos la aplicación web lista para jugar en local.
+Podremos acceder a (http://localhost:8080) y tendremos la aplicación web lista para jugar en local.
 
 ## Funcionamiento dentro de Eclipse
 Abrimos el proyecto con eclipse-pydev. Instalamos el Google Suit Plugin para tener appengine dentro de eclipse.
