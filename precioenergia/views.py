@@ -13,11 +13,13 @@ from precioenergia.models import Greeting
 import urllib
 from urllib2 import urlopen
 import datetime
-from datetime import tzinfo
-#import pytz
+from pytz import timezone
+import pytz
 
 def main_page(request):
-    datos = urlopen("http://www.omie.es/datosPub/marginalpdbc/marginalpdbc_"+datetime.datetime.utcnow().strftime("%Y%m%d")+".1")
+    tz_madrid = timezone('Europe/Madrid')
+    fecha_query = datetime.datetime.now(pytz.utc).astimezone(tz_madrid)
+    datos = urlopen("http://www.omie.es/datosPub/marginalpdbc/marginalpdbc_"+fecha_query.strftime("%Y%m%d")+".1")
     
     # Esto deberia ser una funcion
     contenido = []
@@ -34,5 +36,6 @@ def main_page(request):
     
     template_values = {
         'str_contenido' : str_contenido,
+        'date' : fecha_query.strftime("%Y-%m-%d %H:%M")
     }
     return direct_to_template(request, 'precioenergia/main_page.html', template_values)

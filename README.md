@@ -2,6 +2,9 @@
 
 Ahora mismo la *"aplicación"* se encuentra operativa en [precio-energia.appspot.com](http://precio-energia.appspot.com).
 
+## TO DO List
+Puede consultarse y editarse en [gist](https://gist.github.com/gonzmg88/11158165)
+
 ## Getting Started
 Modo de funcionamiento para empezar a jugar:
 
@@ -46,3 +49,10 @@ Seguro que se puede hacer checkout del proyecto directamente desde dentro de ecl
 Para ejecutarlo Run As > Pydev: Google AppRun
 
 (Supongo que para hacer esto os pedirá la localización de las librerías del appengine).
+
+## Archivos donde está la Fiesta
+* ``PrecioEnergia/precioenergia/views.py``
+* ``PrecioEnergia/precioenergia/templates/precioenergia/main_page.html``
+
+
+
