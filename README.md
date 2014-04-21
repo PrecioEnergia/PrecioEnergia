@@ -1,6 +1,6 @@
 # Proyecto Energia
 
-Ahora mismo la *"aplicación"* se encuentra operativa en [http://precio-energia.appspot.com](precio-energia.appspot.com).
+Ahora mismo la *"aplicación"* se encuentra operativa en [precio-energia.appspot.com](http://precio-energia.appspot.com).
 
 ## Getting Started
 Modo de funcionamiento para empezar a jugar:
