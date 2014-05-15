@@ -3,14 +3,13 @@ Created on Apr 8, 2014
 
 @author: gonzmg
 '''
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
-class PrecioEnergia(db.Model):
+class PrecioEnergia(ndb.Model):
     """Models an individual precioenergia entry with an author, content, and date."""
-    precio_espana = db.FloatProperty()
-    precio_portugal = db.FloatProperty()
-    date = db.DateTimeProperty()
+    precio_espana = ndb.FloatProperty()
+    precio_portugal = ndb.FloatProperty()
+    fecha_prediccion = ndb.DateTimeProperty()
+    fecha = ndb.DateTimeProperty()
     
-    @classmethod
-    def get_key_from_name(cls, precioenergia_name=None):
-        return db.Key.from_path('precioenergia', precioenergia_name or 'default_precioenergia')
+    

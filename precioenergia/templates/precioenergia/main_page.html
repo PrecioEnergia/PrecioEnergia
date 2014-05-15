@@ -1,12 +1,38 @@
 <html>
 <head>
+<!-- Bootstrap -->
+<link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="static/css/main.css" />
-<script type="text/javascript"
-	src="static/dygraphs/dygraph-combined.js"></script>
+
+<script type="text/javascript" src="static/dygraphs/dygraph-combined.js"></script>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="static/jquery/jquery-1.11.1.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="static/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<h1>Precio Energia Día {{date}}</h1>
-	<div id="graphdiv" style="width:90%"></div>
+
+	<div class="container">
+		<div class="masthead">
+			<h3 class="text-muted">Precio de la Energía</h3>
+			<ul class="nav nav-justified">
+				<li class="active"><a href="#">Últimos 10 días</a></li>
+				<li><a href="#">Mostrar Histórico</a></li>
+				<li><a href="#">Mostrar Precio para electrodoméstico</a></li>
+			</ul>
+		</div>
+
+		<!-- <p class="lead">Precio de la Energía para el día: {{date}}</p> -->
+		<div id="graphdiv" style="width: 90%;margin-top: 25px"></div>
+
+	</div>
+
+	<div id="footer">
+		<div class="container">
+			<p class="text-muted" style="text-align: right">Developed by .</p>
+		</div>
+	</div>
 	<script type="text/javascript">
   g = new Dygraph(
     // containing div
@@ -17,13 +43,11 @@
     {
       labels: [ "Fecha", "España","Portugal" ],
       stepPlot: true,
-      ylabel: 'Precio (€/MWh)'
+      ylabel: 'Precio (€/MWh)',
+      xlabel: 'fecha (Europe/Madrid)'
     }
   );
+  
 </script>
-<p>
-	{{str_contenido}}
-</p>
-
 </body>
 </html>
