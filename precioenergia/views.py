@@ -16,14 +16,27 @@ import datetime
 from pytz import timezone
 import pytz
 from operator import itemgetter, attrgetter
+import json
+
+from django.http import HttpResponse
 
 import logging
 from django.template.defaultfilters import length
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 def main_page(request):
     tz_madrid = timezone('Europe/Madrid')
-    fecha_query = datetime.datetime.now(pytz.utc).astimezone(tz_madrid).replace(hour=0,minute=0,second=0,microsecond=0)
+    fecha_query = datetime.datetime.now(pytz.utc).astimezone(tz_madrid).replace(hour=0, minute=0, second=0, microsecond=0)
+        
+    template_values = {
+       'date' : fecha_query.strftime("%Y-%m-%d %H:%M")
+    }
+    return direct_to_template(request, 'precioenergia/main_page.html', template_values)
+
+def EnviarDatos(request):
+    tz_madrid = timezone('Europe/Madrid')
+    fecha_query = datetime.datetime.now(pytz.utc).astimezone(tz_madrid).replace(hour=0, minute=0, second=0, microsecond=0)
     fecha_inicial = fecha_query - datetime.timedelta(days=7)
     fecha_final = fecha_query + datetime.timedelta(days=1)
     
@@ -45,30 +58,29 @@ def main_page(request):
         
         fecha_inicial += datetime.timedelta(days=1)
     
-    content = []
-    for linea in contenido:
-        content.append("[new Date(\"" + pytz.utc.localize(linea.fecha).astimezone(tz_madrid).strftime("%Y-%m-%d %H:%M") + "\")" + "," + str(linea.precio_espana) + "," + str(linea.precio_portugal) + "]")
+    content = map(lambda linea : [ pytz.utc.localize(linea.fecha).astimezone(tz_madrid),linea.precio_espana,linea.precio_portugal],contenido)
+#     for linea in contenido:
+#         content.append("[new Date(\"" + pytz.utc.localize(linea.fecha).astimezone(tz_madrid).strftime("%Y-%m-%d %H:%M") + "\")" + "," + str(linea.precio_espana) + "," + str(linea.precio_portugal) + "]")
+#    str_contenido = "[" + ",\n".join(content) + "]"
+
+    json_obj = json.dumps(content,cls=DjangoJSONEncoder)
+
+    return HttpResponse(json_obj,mimetype='application/json')
+
     
-    str_contenido = "[" + ",\n".join(content) + "]"
-    
-    template_values = {
-        'str_contenido' : str_contenido,
-        'date' : fecha_query.strftime("%Y-%m-%d %H:%M")
-    }
-    return direct_to_template(request, 'precioenergia/main_page.html', template_values)
 
 def ProcesarDatos(fecha):
     contenido = []
     tz_madrid = timezone('Europe/Madrid')
-    logging.info("Solicitando datos para fecha: "+fecha.strftime("%Y-%m-%d %H:%M"))
+    logging.info("Solicitando datos para fecha: " + fecha.strftime("%Y-%m-%d %H:%M"))
     try:
         datos = urlopen("http://www.omie.es/datosPub/marginalpdbc/marginalpdbc_" + fecha.strftime("%Y%m%d") + ".1")
         datos.readline()  # Quitamos la primera linea
         for linea in datos:
             fila = linea.strip(';\r\n').split(';')
-            if (len(fila)>=6):
+            if (len(fila) >= 6):
                 dato = PrecioEnergia()
-                dato.fecha= datetime.datetime(year=int(fila[0]), month=int(fila[1]), day=int(fila[2]), hour=int(fila[3]) - 1,minute=0,tzinfo =tz_madrid).astimezone(pytz.utc).replace(tzinfo=None)
+                dato.fecha = datetime.datetime(year=int(fila[0]), month=int(fila[1]), day=int(fila[2]), hour=int(fila[3]) - 1, minute=0, tzinfo=tz_madrid).astimezone(pytz.utc).replace(tzinfo=None)
                 dato.fecha_prediccion = fecha.astimezone(pytz.utc).replace(tzinfo=None)
                 dato.precio_espana = float(fila[4]) 
                 dato.precio_portugal = float(fila[5]) 

@@ -2,6 +2,9 @@
 <head>
 <!-- Bootstrap -->
 <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="static/css/main.css" />
 
 <script type="text/javascript" src="static/dygraphs/dygraph-combined.js"></script>
@@ -10,6 +13,8 @@
 <script src="static/jquery/jquery-1.11.1.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="static/bootstrap/js/bootstrap.min.js"></script>
+<script
+	src="static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 </head>
 <body>
 
@@ -18,14 +23,16 @@
 			<h3 class="text-muted">Precio de la Energía</h3>
 			<ul class="nav nav-justified">
 				<li class="active"><a href="#">Últimos 10 días</a></li>
-				<li><a href="#">Mostrar Histórico</a></li>
-				<li><a href="#">Mostrar Precio para electrodoméstico</a></li>
+				<li><a href="#" data-toggle="modal"
+					data-target="#modalHistorico">Mostrar Histórico</a></li>
+				<li><a href="#" data-toggle="modal"
+					data-target="#modalPrecioElectrodomestico">Mostrar Precio para
+						Electrodoméstico</a></li>
 			</ul>
 		</div>
 
 		<!-- <p class="lead">Precio de la Energía para el día: {{date}}</p> -->
-		<div id="graphdiv" style="width: 90%;margin-top: 25px"></div>
-
+		<div id="graphdiv" style="width: 90%; margin-top: 25px"></div>
 	</div>
 
 	<div id="footer">
@@ -33,20 +40,86 @@
 			<p class="text-muted" style="text-align: right">Developed by .</p>
 		</div>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="modalHistorico" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Mostrar Histórico</h4>
+				</div>
+				<div class="modal-body">...</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary">Aceptar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="modalPrecioElectrodomestico" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Mostrar Precio Electrodoméstico</h4>
+				</div>
+				<div class="modal-body">
+					<div class="well">
+						<div id="datetimepicker1" class="input-append date">
+							<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input> <span
+								class="add-on"> <i data-time-icon="icon-time"
+								data-date-icon="icon-calendar"> </i>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary">Aceptar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script type="text/javascript">
-  g = new Dygraph(
-    // containing div
-    document.getElementById("graphdiv"),
-    {% autoescape off %}
-    {{str_contenido}},
-    {% endautoescape %}
-    {
-      labels: [ "Fecha", "España","Portugal" ],
-      stepPlot: true,
-      ylabel: 'Precio (€/MWh)',
-      xlabel: 'fecha (Europe/Madrid)'
-    }
-  );
+	var datos;
+	$(document).ready(function(){
+		$.ajax({
+			url: "ObtenerDatos",
+			type: "GET",
+			dataType : "json",
+			data: {
+       			id: 123
+    		},
+			// code to run if the request succeeds;
+    		// the response is passed to the function
+		    success: function( json ) {
+		      g = new Dygraph(
+				    // containing div
+				    document.getElementById("graphdiv"),
+				    json.map(function(dato){return [new Date(dato[0]),dato[1],dato[2]];}),
+				    {
+				      labels: [ "Fecha", "España","Portugal" ],
+				      stepPlot: true,
+				      ylabel: 'Precio (€/MWh)',
+				      xlabel: 'fecha (Europe/Madrid)'
+				    }
+				  );
+		    },
+		 
+		    // code to run if the request fails; the raw request and
+		    // status codes are passed to the function
+		    error: function( xhr, status, errorThrown ) {
+		        alert( "Sorry, there was a problem!" );
+		        console.log( "Error: " + errorThrown );
+		        console.log( "Status: " + status );
+		        console.dir( xhr );
+		    }
+		});
+	});
   
 </script>
 </body>
